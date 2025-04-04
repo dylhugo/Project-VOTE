@@ -15,20 +15,40 @@ struct ConfirmationView: View {
             Color.white.ignoresSafeArea()
 
             VStack(spacing: 30) {
-                Text("✅ Vote Confirmed")
-                    .font(.largeTitle)
+                Spacer()
+                Text("Vote Confirmed")
+                    .foregroundColor(Color.black)
+                    .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(.green)
-
+                    .multilineTextAlignment(.center)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer()
+                Spacer()
                 Text("You voted for:")
+                    .foregroundColor(Color.black)
                     .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(selectedParty)
-                    .font(.title)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color.black)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
                     .padding()
-
-                Spacer()
+                    .background(
+                        Color.gray.opacity(0.3)
+                    )
+                    .cornerRadius(10)
+                
             }
             .padding()
         }
