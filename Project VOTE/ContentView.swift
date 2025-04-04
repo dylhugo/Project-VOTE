@@ -119,3 +119,6 @@ struct ContentView: View {
         }
     }
 
+#Preview {
+    FeedbackView()
+}

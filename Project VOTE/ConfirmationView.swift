@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ConfirmationView: View {
     var selectedParty: String
+    @State private var navigateToFeedback = false
 
     var body: some View {
         ZStack {
@@ -52,6 +53,11 @@ struct ConfirmationView: View {
             }
             .padding()
         }
+        NavigationLink("Give Feedback", destination: FeedbackView())
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
     }
 }
 
