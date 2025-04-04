@@ -103,4 +103,16 @@ Please credit the original author if reused.
 - Participants who provided feedback
 
 ---
+## ScreenShots 
 
+![Simulator Screenshot - iPhone 16 Pro - 2025-04-04 at 19 46 33](https://github.com/user-attachments/assets/2d742eaf-7cc0-41c8-821d-97e870f8cf80)
+
+![Simulator Screenshot - iPhone 16 Pro - 2025-04-04 at 19 47 32](https://github.com/user-attachments/assets/09a9d4ac-ac73-4367-9ea7-d824f7b991aa)
+
+![Simulator Screenshot - iPhone 16 Pro - 2025-04-04 at 19 47 52](https://github.com/user-attachments/assets/2dee8a6c-52ff-4589-9887-a1c16b6eddd7)
+
+![Simulator Screenshot - iPhone 16 Pro - 2025-04-04 at 19 48 08](https://github.com/user-attachments/assets/052cd70c-ef06-49db-8999-56814e405da4)
+
+![Simulator Screenshot - iPhone 16 Pro - 2025-04-04 at 19 48 13](https://github.com/user-attachments/assets/606bcfbb-2f69-422c-9d17-369a272aa42c)
+
+![Simulator Screenshot - iPhone 16 Pro - 2025-04-04 at 19 48 32](https://github.com/user-attachments/assets/cf5ae133-fe95-4527-8c70-484430c1ac2f)
