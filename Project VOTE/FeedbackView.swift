@@ -11,6 +11,7 @@ struct FeedbackView: View {
     @State private var appFeedback: String = ""
     @State private var blockchainFeedback: String = ""
     @State private var feedbackSubmitted = false
+    @StateObject private var blockchain = BlockchainManager()
 
     var body: some View {
         NavigationStack {
@@ -29,24 +30,32 @@ struct FeedbackView: View {
                             .multilineTextAlignment(.leading)
 
                         TextEditor(text: $appFeedback)
+                            .foregroundColor(.black)
+                            .padding(8)
                             .frame(height: 120)
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
+                            .background(Color.white)
                             .cornerRadius(10)
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(0.3)))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.3))
+                            )
                     }
 
                     Group {
                         Text("2. What are your thoughts on voting using blockchain?")
                             .font(.headline)
                             .multilineTextAlignment(.leading)
-
+                        
                         TextEditor(text: $blockchainFeedback)
+                            .foregroundColor(.black)
+                            .padding(8)
                             .frame(height: 120)
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
+                            .background(Color.white)
                             .cornerRadius(10)
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(0.3)))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.3))
+                            )
                     }
 
                     Button("Submit Feedback") {
@@ -69,9 +78,18 @@ struct FeedbackView: View {
                     }
 
                     Spacer()
+                    
                 }
                 .padding()
             }
+        }
+        NavigationLink(destination: BlockchainAuditView(blockchain: blockchain)) {
+            Text("🔗 View Blockchain Ledger")
+                .font(.headline)
+                .padding()
+                .frame(width: 300)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(10)
         }
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct voteView: View {
     @State private var selectedVote: String? = nil
     @State private var voteSubmitted = false
+    @StateObject private var blockchainManager = BlockchainManager()
     
     let options = ["Center-Right Parties", "Center-Left Parties", "Right-wing Parties", "Left-wing Parties", "Green Parties", "Change parties"]
     
@@ -47,8 +48,9 @@ struct voteView: View {
                         .frame(width: 300)
                     }
                     
-                    if let _ = selectedVote {
+                    if let vote = selectedVote {
                         Button("Submit Vote") {
+                            blockchainManager.addVote(vote)
                             voteSubmitted = true
                         }
                         .padding()
@@ -62,6 +64,7 @@ struct voteView: View {
                 }
                 .padding()
             }
+// navigation to confirmation screen
             .navigationDestination(isPresented: $voteSubmitted) {
                 if let vote = selectedVote {
                     ConfirmationView(selectedParty: vote)
