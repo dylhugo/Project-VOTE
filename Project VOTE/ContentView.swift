@@ -68,7 +68,7 @@ struct ContentView: View {
                     ZStack(alignment: .leading) {
                         if codeEntered.isEmpty {
                             Text("6 digit code")
-                                .foregroundColor(.gray) // ← Customize the placeholder color here
+                                .foregroundColor(.gray)
                                 .padding(.leading, 15)
                                 .multilineTextAlignment(.center)
                         }
@@ -113,7 +113,7 @@ struct ContentView: View {
                 .padding()
             }
                 .navigationDestination(isPresented: $navigateToVote) {
-                    voteView() // ✅ Make sure this matches your struct name exactly
+                    voteView()
                 }
             }
         }
