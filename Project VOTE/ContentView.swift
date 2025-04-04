@@ -11,15 +11,11 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var codeEntered: String = ""
+    @State private var navigateToVote = false
+    
     var body: some View {
         
-        
-            
-            
-            
-            
-            
-            //Stack for main text
+//Stack for main text
             VStack {
                 Spacer()
                 
@@ -31,13 +27,14 @@ struct ContentView: View {
                 Spacer()
             }
             
-            // stact for code entry
+// stack for code entry
             VStack {
                 Text("Enter Registration Code")
                     .font(.system(size: 20, weight: .bold, design: .default))
                     .multilineTextAlignment(.center)
                 
-                TextField("", text: .constant(""))
+                TextField("**** **** ****", text: .constant(""))
+                    .multilineTextAlignment(.center)
                     .padding()
                     .frame(width: 300, height: 50)
                     .keyboardType(.numberPad)
@@ -50,7 +47,8 @@ struct ContentView: View {
                     .font(.system(size: 20, weight: .bold, design: .default))
                     .multilineTextAlignment(.center)
                 
-                SecureField("6 didget code", text: $codeEntered)
+                SecureField("6 didget code", text: $codeEntered).lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
+                    .multilineTextAlignment(.center)
                     .padding()
                     .frame(width: 300, height: 50)
                     .keyboardType(.numberPad)
@@ -59,23 +57,31 @@ struct ContentView: View {
                     .autocorrectionDisabled(true)
                 
                 
-                
+// confirm button
                 Spacer()
                 
                 Button("Confirm") {
-                    /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                        let filtered = codeEntered.filter { $0.isNumber }
+                        codeEntered = String(filtered.prefix(6))
+                        
+                        if codeEntered.count < 6 {
+                            print("Code too short!")
+                        } else {
+                            print("Submitted code: \(codeEntered)")
+                            navigateToVote = true
+                        }
                 }
+ // hidden navagation link
+                .navigationDestination(isPresented: $navigateToVote) {
+                                voteView()
+                }
+                
                 Spacer()
             }
-            
-            
-            
-            // end
-        
     }
 }
 
-
+// end
 
 
 
