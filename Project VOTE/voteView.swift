@@ -12,7 +12,7 @@ struct voteView: View {
     @State private var voteSubmitted = false
     @StateObject private var blockchainManager = BlockchainManager()
     
-    let options = ["Center-Right Parties", "Center-Left Parties", "Right-wing Parties", "Left-wing Parties", "Green Parties", "Change parties"]
+    let options = ["Red Team", "Blue Team", "Green Team", "Yellow Team", "Pink team ", "Purple team",]
     
     var body: some View {
         NavigationStack {
