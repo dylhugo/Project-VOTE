@@ -82,6 +82,10 @@ struct FeedbackView: View {
                                     .pickerStyle(SegmentedPickerStyle())
                                 }
                                 .padding(.vertical, 5)
+                                .pickerStyle(SegmentedPickerStyle())
+                                .frame(maxWidth: .infinity)
+                                .background(Color.white)
+                                .padding(.top, 2)
                             }
                         }
                     }
