@@ -35,6 +35,12 @@ class BlockchainManager: ObservableObject {
         saveBlockchain()
     }
 
+    func deleteAllVotes() {
+        let genesis = Block(id: UUID(), index: 0, timestamp: Date(), vote: "Genesis Block", previousHash: "0", hash: "genesis-hash")
+        self.chain = [genesis]
+        saveBlockchain()
+    }
+
     private func generateHash(index: Int, vote: String, previousHash: String, timestamp: Date) -> String {
         let combined = "\(index)\(vote)\(previousHash)\(timestamp.timeIntervalSince1970)"
         return String(combined.hashValue)
@@ -56,9 +62,9 @@ class BlockchainManager: ObservableObject {
             self.chain = decoded
         } catch {
             print("🌀 Starting new chain (no saved blockchain found)")
-            // Genesis block
             let genesis = Block(id: UUID(), index: 0, timestamp: Date(), vote: "Genesis Block", previousHash: "0", hash: "genesis-hash")
             self.chain = [genesis]
         }
     }
 }
+

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct FeedbackView: View {
-    @State private var scaleResponses: [UUID: Int] = [:]
-    @State private var openResponses: [UUID: String] = [:]
+    @State private var scaleResponses: [String: Int] = [:]
+    @State private var openResponses: [String: String] = [:]
     @State private var feedbackSubmitted = false
     @StateObject private var blockchain = BlockchainManager()
 
@@ -24,7 +24,6 @@ struct FeedbackView: View {
         let text: String
     }
 
-    // MARK: - Ordered Sections
     let sectionOrder = [
         "Usability & Accessibility",
         "Privacy & Security Perception",
@@ -32,27 +31,19 @@ struct FeedbackView: View {
         "Comparative View"
     ]
 
-    // MARK: - Questions
     let scaleQuestions: [FeedbackQuestion] = [
-        // Section A
         FeedbackQuestion(text: "The voting system was easy to navigate.", section: "Usability & Accessibility"),
         FeedbackQuestion(text: "I was able to understand what to do without external instructions.", section: "Usability & Accessibility"),
         FeedbackQuestion(text: "The voting process took an appropriate amount of time.", section: "Usability & Accessibility"),
         FeedbackQuestion(text: "I experienced no technical difficulties while using the system.", section: "Usability & Accessibility"),
         FeedbackQuestion(text: "I believe someone with little technical knowledge could use this system.", section: "Usability & Accessibility"),
-
-        // Section B
         FeedbackQuestion(text: "I felt confident that my vote was anonymous.", section: "Privacy & Security Perception"),
         FeedbackQuestion(text: "I was aware of how my data would be handled during and after voting.", section: "Privacy & Security Perception"),
         FeedbackQuestion(text: "The system gave me the impression that it could withstand tampering or hacking.", section: "Privacy & Security Perception"),
         FeedbackQuestion(text: "I believe this system could be safely used in a real election scenario.", section: "Privacy & Security Perception"),
-
-        // Section C
         FeedbackQuestion(text: "I could verify that my vote had been recorded correctly.", section: "Transparency & Trust"),
         FeedbackQuestion(text: "The system gave enough feedback (e.g., confirmations or receipts) to build trust.", section: "Transparency & Trust"),
         FeedbackQuestion(text: "I understood how the system keeps votes secure without revealing identities.", section: "Transparency & Trust"),
-
-        // Section D
         FeedbackQuestion(text: "I trust this system more than traditional paper-based voting.", section: "Comparative View"),
         FeedbackQuestion(text: "I trust this system more than existing electronic voting systems (if you’ve used any).", section: "Comparative View")
     ]
@@ -67,77 +58,40 @@ struct FeedbackView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 25) {
-                    Text("📝 Feedback Survey")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("📝 Feedback Survey")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+
+                        // Spacer between title and explanation
+                        Text("1 = Strongly Disagree  5 = Strongly Agree")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.bottom, 10)
+
 
                     ForEach(sectionOrder, id: \.self) { section in
-                        Section(header: Text(section).font(.headline)) {
-                            ForEach(scaleQuestions.filter { $0.section == section }) { question in
-                                GroupBox {
-                                    VStack(alignment: .leading, spacing: 12) {
-                                        Text(question.text)
-                                            .font(.subheadline)
-                                            .fixedSize(horizontal: false, vertical: true)
-
-                                        Picker("Answer", selection: Binding<Int?>(
-                                            get: { scaleResponses[question.id] },
-                                            set: { scaleResponses[question.id] = $0 }
-                                        )) {
-                                            ForEach(1...5, id: \.self) { value in
-                                                Text("\(value)").tag(value as Int?)
-                                            }
-                                        }
-                                        .pickerStyle(SegmentedPickerStyle())
-                                        .frame(maxWidth: .infinity)
-                                        .animation(.none, value: scaleResponses[question.id])
-                                    }
-                                    .padding(.vertical, 8)
-                                }
-                            }
-                        }
+                        renderScaleSection(for: section)
                     }
 
-                    Section(header: Text("Open-Ended Feedback").font(.headline)) {
-                        ForEach(openEndedQuestions) { question in
-                            GroupBox {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(question.text)
-                                        .font(.subheadline)
-
-                                    TextEditor(text: Binding<String>(
-                                        get: { openResponses[question.id, default: ""] },
-                                        set: { openResponses[question.id] = $0 }
-                                    ))
-                                    .frame(height: 100)
-                                    .padding(8)
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.gray.opacity(0.3))
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    openEndedSection
 
                     Button("Submit Feedback") {
+                        let entry = FeedbackEntry(
+                            date: Date(),
+                            scaleResponses: scaleResponses,
+                            openResponses: openResponses
+                        )
+
+                        FeedbackStorage.shared.save(entry: entry)
                         feedbackSubmitted = true
-                        // 🔒 Save logic here
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(12)
-
-                    if feedbackSubmitted {
-                        Text("✅ Thank you for your feedback!")
-                            .foregroundColor(.green)
-                            .font(.title3)
-                            .padding(.top)
-                    }
 
                     NavigationLink(destination: BlockchainAuditView(blockchain: blockchain)) {
                         Text("🔗 View Blockchain Ledger")
@@ -151,11 +105,62 @@ struct FeedbackView: View {
                 .padding()
             }
             .background(Color(UIColor.systemGroupedBackground))
+            .navigationDestination(isPresented: $feedbackSubmitted) {
+                ThankYouView()
+            }
+        }
+    }
+
+    private func renderScaleSection(for section: String) -> some View {
+        Section(header: Text(section).font(.headline)) {
+            ForEach(scaleQuestions.filter { $0.section == section }) { question in
+                GroupBox {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(question.text)
+                            .font(.subheadline)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        Picker("Answer", selection: Binding<Int?>(
+                            get: { scaleResponses[question.text] },
+                            set: { scaleResponses[question.text] = $0 }
+                        )) {
+                            ForEach(1...5, id: \.self) { value in
+                                Text("\(value)").tag(value as Int?)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .frame(maxWidth: .infinity)
+                        .animation(.none, value: scaleResponses[question.text])
+                    }
+                    .padding(.vertical, 8)
+                }
+            }
+        }
+    }
+
+    private var openEndedSection: some View {
+        Section(header: Text("Open-Ended Feedback").font(.headline)) {
+            ForEach(openEndedQuestions) { question in
+                GroupBox {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(question.text)
+                            .font(.subheadline)
+
+                        TextEditor(text: Binding<String>(
+                            get: { openResponses[question.text, default: ""] },
+                            set: { openResponses[question.text] = $0 }
+                        ))
+                        .frame(height: 100)
+                        .padding(8)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray.opacity(0.3))
+                        )
+                    }
+                }
+            }
         }
     }
 }
-
-#Preview {
-    FeedbackView()
-}
-

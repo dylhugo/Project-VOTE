@@ -9,7 +9,8 @@ import SwiftUI
 
 struct BlockchainAuditView: View {
     @ObservedObject var blockchain: BlockchainManager
-
+    @State private var confirmDelete = false
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 15) {
@@ -18,7 +19,7 @@ struct BlockchainAuditView: View {
                     .font(.largeTitle)
                     .padding()
                     .multilineTextAlignment(.center)
-
+                
                 ForEach(blockchain.chain) { block in
                     VStack(alignment: .leading, spacing: 6) {
                         Text("🧱 Block #\(block.index)")
@@ -36,8 +37,9 @@ struct BlockchainAuditView: View {
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(12)
                 }
+                
+                
             }
-            .padding()
         }
     }
 }

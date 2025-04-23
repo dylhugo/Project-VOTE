@@ -6,9 +6,8 @@
 //
 import Foundation
 
-
 struct Block: Identifiable, Codable {
-    let id: UUID 
+    let id: UUID
     let index: Int
     let timestamp: Date
     let vote: String
@@ -16,18 +15,16 @@ struct Block: Identifiable, Codable {
     let hash: String
 }
 
-
 func createBlock(vote: String, previousHash: String, index: Int) -> Block {
     let timestamp = Date()
     let hashInput = "\(vote)\(timestamp)\(previousHash)"
     let hash = String(hashInput.hashValue)
 
-    return Block(id:UUID(),
+    return Block(id: UUID(),
                  index: index,
                  timestamp: timestamp,
                  vote: vote,
                  previousHash: previousHash,
                  hash: hash)
 }
-
 
