@@ -43,7 +43,7 @@ election integrity.
 - **Language**: Swift
 - **Framework**: SwiftUI
 - **Xcode Version**: 15+
-- **Devices Supported**: iPhone SE to iPhone 15 Pro Max
+- **Devices Supported**: iPhone SE to iPhone 16 Pro Max
 
 ---
 
